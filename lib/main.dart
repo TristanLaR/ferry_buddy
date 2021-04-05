@@ -26,4 +26,20 @@ class HomePage extends StatelessWidget {
       child: Container(),
     );
   }
+
+  Widget _buildCountdown(BuildContext context) {
+    final DateTime currentTime = DateTime.now();
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              "Summerville: ",
+              style: TextStyle(fontSize: 18.0),
+            )
+          ],
+        )
+      ],
+    );
+  }
 }
