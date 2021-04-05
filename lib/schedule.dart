@@ -13,6 +13,11 @@ class FerryScheduleItem {
     this.scheduleType,
     this.ferrySide,
   });
+
+  DateTime getDateTime() {
+    DateTime now = DateTime.now();
+    return DateTime(now.year, now.month, now.day, departureTime.hour, departureTime.minute);
+  }
 }
 
 List<FerryScheduleItem> schedule = [

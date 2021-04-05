@@ -7,32 +7,24 @@ class CountDownWidget extends StatefulWidget {
 }
 
 class _CountDownWidgetState extends State<CountDownWidget> {
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text('Slide direction Up'),
-          SlideCountdownClock(
-            duration: Duration(days: 20, minutes: 1000000),
-            slideDirection: SlideDirection.Up,
-            separator: ":",
-            textStyle: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-            onDone: () {
-            },
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        SlideCountdownClock(
+          duration: Duration(minutes: 10),
+          slideDirection: SlideDirection.Up,
+          separator: ":",
+          textStyle: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
           ),
-          
-        ],
-      ),
+          onDone: () {},
+        ),
+      ],
     );
   }
 }
