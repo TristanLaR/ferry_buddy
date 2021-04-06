@@ -15,14 +15,16 @@ class _CountDownWidgetState extends State<CountDownWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         SlideCountdownClock(
-          duration: Duration(minutes: 10),
+          duration: Duration(seconds: 3),
           slideDirection: SlideDirection.Up,
           separator: ":",
           textStyle: TextStyle(
             fontSize: 40,
             fontWeight: FontWeight.bold,
           ),
-          onDone: () {},
+          onDone: () {
+            setState(() {});
+          },
         ),
       ],
     );

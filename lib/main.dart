@@ -1,5 +1,6 @@
 import 'package:ferry_buddy/schedule.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
 void main() {
@@ -10,22 +11,32 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Ferry Buddy',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: FerryTimer(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+class FerryTimer extends StatefulWidget {
+  const FerryTimer({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  FerryTimerState createState() => FerryTimerState();
+}
+
+class FerryTimerState extends State<FerryTimer> {
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
@@ -40,7 +51,11 @@ class HomePage extends StatelessWidget {
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
-              onDone: () {},
+              onDone: () {
+                setState(() {
+                  _scaffoldKey = GlobalKey();
+                });
+              },
             ),
           ],
         ),
@@ -52,8 +67,8 @@ class HomePage extends StatelessWidget {
     FerryScheduleItem nextRun;
     for (var item in schedule) {
       if (item.getDateTime().isAfter(DateTime.now())) {
-          nextRun = item;
-          break;
+        nextRun = item;
+        break;
       }
     }
     return nextRun.getDateTime().difference(DateTime.now());
