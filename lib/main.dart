@@ -17,7 +17,24 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FerryTimer(ferrySide: FerrySide.Millidgeville),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          FerryTimer(ferrySide: FerrySide.Millidgeville),
+          FerryTimer(ferrySide: FerrySide.Summerville),
+        ],
+      ),
     );
   }
 }
@@ -34,24 +51,29 @@ class FerryTimer extends StatefulWidget {
 }
 
 class FerryTimerState extends State<FerryTimer> {
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  UniqueKey _buildKey = UniqueKey();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      body: Center(
+    FerryScheduleItem nextRun = _getNextRun();
+    return Container(
+      key: _buildKey,
+      // height: 200.0,
+      child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              EnumToString.convertToString(widget.ferrySide),
+              EnumToString.convertToString(widget.ferrySide) +
+                  " - " +
+                  nextRun.departureTime.hour.toString() +
+                  ":" +
+                  nextRun.departureTime.minute.toString(),
               style: TextStyle(fontSize: 36.0),
             ),
             SlideCountdownClock(
-              duration: _getDuration(),
+              duration: nextRun.getDateTime().difference(DateTime.now()),
               // duration: Duration(seconds: 4),
               slideDirection: SlideDirection.Down,
               separator: ":",
@@ -61,7 +83,7 @@ class FerryTimerState extends State<FerryTimer> {
               ),
               onDone: () {
                 setState(() {
-                  _scaffoldKey = GlobalKey();
+                  _buildKey = UniqueKey();
                 });
               },
             ),
@@ -71,14 +93,15 @@ class FerryTimerState extends State<FerryTimer> {
     );
   }
 
-  Duration _getDuration() {
+  FerryScheduleItem _getNextRun() {
     FerryScheduleItem nextRun;
     for (var item in schedule) {
-      if (item.getDateTime().isAfter(DateTime.now())) {
+      if (item.ferrySide == widget.ferrySide &&
+          item.getDateTime().isAfter(DateTime.now())) {
         nextRun = item;
         break;
       }
     }
-    return nextRun.getDateTime().difference(DateTime.now());
+    return nextRun;
   }
 }
