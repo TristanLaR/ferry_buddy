@@ -1,6 +1,7 @@
 import 'package:ferry_buddy/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
 void main() {
@@ -16,13 +17,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FerryTimer(),
+      home: FerryTimer(ferrySide: FerrySide.Millidgeville),
     );
   }
 }
 
 class FerryTimer extends StatefulWidget {
+  final FerrySide ferrySide;
   const FerryTimer({
+    this.ferrySide,
     Key key,
   }) : super(key: key);
 
@@ -43,8 +46,13 @@ class FerryTimerState extends State<FerryTimer> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              EnumToString.convertToString(widget.ferrySide),
+              style: TextStyle(fontSize: 36.0),
+            ),
             SlideCountdownClock(
               duration: _getDuration(),
+              // duration: Duration(seconds: 4),
               slideDirection: SlideDirection.Down,
               separator: ":",
               textStyle: TextStyle(

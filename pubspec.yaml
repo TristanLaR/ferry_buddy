@@ -32,6 +32,7 @@ dependencies:
   hooks_riverpod: ^0.14.0
   equatable: ^1.2.6
   slide_countdown_clock: ^1.0.3
+  enum_to_string: ^2.0.1
 
 dev_dependencies:
   flutter_test:
