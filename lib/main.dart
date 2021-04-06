@@ -1,8 +1,8 @@
 import 'package:ferry_buddy/schedule.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: SafeArea(child: HomePage()),
     );
   }
 }
@@ -67,10 +67,9 @@ class FerryTimerState extends State<FerryTimer> {
             Text(
               EnumToString.convertToString(widget.ferrySide) +
                   " - " +
-                  nextRun.departureTime.hour.toString() +
-                  ":" +
-                  nextRun.departureTime.minute.toString(),
-              style: TextStyle(fontSize: 36.0),
+                  // DateFormat("h:mma").format(nextRun.departureTime) +
+                  nextRun.departureTime.format(context),
+              style: TextStyle(fontSize: 24.0),
             ),
             SlideCountdownClock(
               duration: nextRun.getDateTime().difference(DateTime.now()),
@@ -78,7 +77,7 @@ class FerryTimerState extends State<FerryTimer> {
               slideDirection: SlideDirection.Down,
               separator: ":",
               textStyle: TextStyle(
-                fontSize: 40,
+                fontSize: 36,
                 fontWeight: FontWeight.bold,
               ),
               onDone: () {
