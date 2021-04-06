@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade100,
       body: Stack(
         children: [
           Background(),
@@ -48,8 +48,25 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               Flexible(
-                flex: 6,
-                child: Container(),
+                flex: 7,
+                child: Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 36.0,
+                    vertical: 24.0,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 4,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
