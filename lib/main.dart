@@ -1,3 +1,4 @@
+import 'package:ferry_buddy/background.dart';
 import 'package:ferry_buddy/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -28,11 +29,30 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
+      body: Stack(
         children: [
-          FerryTimer(ferrySide: FerrySide.Millidgeville),
-          FerryTimer(ferrySide: FerrySide.Summerville),
-          // ScheduleCard(),
+          Background(),
+          Column(
+            children: [
+              Flexible(
+                flex: 4,
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FerryTimer(ferrySide: FerrySide.Millidgeville),
+                      FerryTimer(ferrySide: FerrySide.Summerville),
+                      // ScheduleCard(),
+                    ],
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 6,
+                child: Container(),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -111,7 +131,9 @@ class ScheduleCard extends StatelessWidget {
     return Container(
       child: Column(
         children: [
-          ScheduleCardColumn(ferrySide: FerrySide.Summerville,)
+          ScheduleCardColumn(
+            ferrySide: FerrySide.Summerville,
+          )
         ],
       ),
     );
@@ -139,10 +161,10 @@ class ScheduleCardColumn extends StatelessWidget {
           ListView.builder(
             itemCount: nextRuns.length,
             itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              title: Text(nextRuns[index].departureTime.format(context)),
-            );
-           },
+              return ListTile(
+                title: Text(nextRuns[index].departureTime.format(context)),
+              );
+            },
           ),
         ],
       ),
