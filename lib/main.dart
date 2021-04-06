@@ -2,7 +2,6 @@ import 'package:ferry_buddy/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
-import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,6 +32,7 @@ class HomePage extends StatelessWidget {
         children: [
           FerryTimer(ferrySide: FerrySide.Millidgeville),
           FerryTimer(ferrySide: FerrySide.Summerville),
+          // ScheduleCard(),
         ],
       ),
     );
@@ -58,7 +58,6 @@ class FerryTimerState extends State<FerryTimer> {
     FerryScheduleItem nextRun = _getNextRun();
     return Container(
       key: _buildKey,
-      // height: 200.0,
       child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -67,7 +66,6 @@ class FerryTimerState extends State<FerryTimer> {
             Text(
               EnumToString.convertToString(widget.ferrySide) +
                   " - " +
-                  // DateFormat("h:mma").format(nextRun.departureTime) +
                   nextRun.departureTime.format(context),
               style: TextStyle(fontSize: 24.0),
             ),
@@ -102,5 +100,66 @@ class FerryTimerState extends State<FerryTimer> {
       }
     }
     return nextRun;
+  }
+}
+
+class ScheduleCard extends StatelessWidget {
+  const ScheduleCard({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          ScheduleCardColumn(ferrySide: FerrySide.Summerville,)
+        ],
+      ),
+    );
+  }
+}
+
+class ScheduleCardColumn extends StatelessWidget {
+  final FerrySide ferrySide;
+
+  const ScheduleCardColumn({
+    this.ferrySide,
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final List<FerryScheduleItem> nextRuns = _getNextRuns();
+    return Container(
+      child: Column(
+        children: [
+          Text(
+            EnumToString.convertToString(ferrySide),
+            style: TextStyle(fontSize: 18.0),
+          ),
+          ListView.builder(
+            itemCount: nextRuns.length,
+            itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              title: Text(nextRuns[index].departureTime.format(context)),
+            );
+           },
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<FerryScheduleItem> _getNextRuns() {
+    List<FerryScheduleItem> nextRuns;
+    int listLength = 6;
+    for (var item in schedule) {
+      if (item.ferrySide == ferrySide &&
+          item.getDateTime().isAfter(DateTime.now())) {
+        nextRuns.add(item);
+        listLength--;
+        if (listLength == 0) break;
+      }
+    }
+    return nextRuns;
   }
 }
