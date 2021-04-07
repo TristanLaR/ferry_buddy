@@ -49,24 +49,7 @@ class HomePage extends StatelessWidget {
               ),
               Flexible(
                 flex: 7,
-                child: Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 36.0,
-                    vertical: 24.0,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                ),
+                child: ScheduleCard(),
               ),
             ],
           ),
@@ -104,7 +87,11 @@ class FerryTimerState extends State<FerryTimer> {
               EnumToString.convertToString(widget.ferrySide) +
                   " - " +
                   nextRun.departureTime.format(context),
-              style: TextStyle(fontSize: 24.0),
+              style: TextStyle(
+                fontSize: 24.0,
+                color: Colors.white,
+                // fontWeight: FontWeight.bold,
+              ),
             ),
             SlideCountdownClock(
               duration: nextRun.getDateTime().difference(DateTime.now()),
@@ -114,6 +101,7 @@ class FerryTimerState extends State<FerryTimer> {
               textStyle: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
               onDone: () {
                 setState(() {
@@ -146,11 +134,27 @@ class ScheduleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
+      margin: EdgeInsets.symmetric(
+        horizontal: 36.0,
+        vertical: 0.0,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
         children: [
-          ScheduleCardColumn(
-            ferrySide: FerrySide.Summerville,
-          )
+          Flexible(child: ScheduleCardColumn(ferrySide: FerrySide.Summerville)),
+          Flexible(child: ScheduleCardColumn(ferrySide: FerrySide.Millidgeville)),
         ],
       ),
     );
@@ -167,33 +171,61 @@ class ScheduleCardColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<FerryScheduleItem> nextRuns = _getNextRuns();
+    final List<FerryScheduleItem> nextRuns = _testData();
     return Container(
+      margin: EdgeInsets.fromLTRB(12.0, 16.0, 12.0, 0.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             EnumToString.convertToString(ferrySide),
-            style: TextStyle(fontSize: 18.0),
+            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           ),
-          ListView.builder(
-            itemCount: nextRuns.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text(nextRuns[index].departureTime.format(context)),
-              );
-            },
-          ),
+          SizedBox(height: 32.0),
+          ListView.separated(
+              separatorBuilder: (context, index) {
+                return SizedBox(height: 12.0);
+              },
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: nextRuns.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  child: Center(
+                    child: Text(
+                      nextRuns[index].departureTime.format(context),
+                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                );
+              }),
         ],
       ),
     );
   }
 
-  List<FerryScheduleItem> _getNextRuns() {
-    List<FerryScheduleItem> nextRuns;
-    int listLength = 6;
+  List<FerryScheduleItem> _testData() {
+    List<FerryScheduleItem> nextRuns = [];
+    int listLength = 8;
     for (var item in schedule) {
-      if (item.ferrySide == ferrySide &&
-          item.getDateTime().isAfter(DateTime.now())) {
+      nextRuns.add(item);
+      listLength--;
+      if (listLength == 0) break;
+    }
+    return nextRuns;
+  }
+
+  List<FerryScheduleItem> _getNextRuns() {
+    List<FerryScheduleItem> nextRuns = [];
+    int listLength = 6;
+    bool rightSide;
+    bool rightTime;
+    for (var item in schedule) {
+      rightSide = item.ferrySide == ferrySide;
+      rightTime = item
+          .getDateTime()
+          .isAfter(DateTime.now().subtract(Duration(hours: 5)));
+      if (rightSide && rightTime) {
         nextRuns.add(item);
         listLength--;
         if (listLength == 0) break;
