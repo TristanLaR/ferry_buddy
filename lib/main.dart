@@ -1,10 +1,18 @@
-import 'package:ferry_buddy/background.dart';
-import 'package:ferry_buddy/schedule.dart';
+import 'package:ferry_buddy/widgets/background.dart';
+import 'package:ferry_buddy/models/main_schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
-void main() {
+const scheduleBox = 'schedule';
+
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter<FerryScheduleItem>(ContactAdapter());
+  Hive.registerAdapter<Relationship>(RelationshipAdapter());
+  await Hive.openBox<Contact>(contactsBoxName);
   runApp(MyApp());
 }
 

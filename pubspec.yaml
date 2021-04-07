@@ -35,8 +35,13 @@ dependencies:
   enum_to_string: ^2.0.1
   wave: ^0.2.0
   intl: ^0.17.0
+  hive: ^1.2.0
+  hive_flutter: ^0.3.0+1
 
 dev_dependencies:
+  hive_generator: ^0.7.0
+  build_runner: ^1.7.2
+  
   flutter_test:
     sdk: flutter
 

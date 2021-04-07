@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
+
+part 'main_schedule.g.dart';
 
 enum ScheduleType { Regular, SatHoliday, Sunday }
 enum FerrySide { Summerville, Millidgeville }
@@ -20,7 +24,7 @@ class FerryScheduleItem {
   }
 }
 
-List<FerryScheduleItem> schedule = [
+const List<FerryScheduleItem> schedule = [
   FerryScheduleItem(
       departureTime: TimeOfDay(hour: 6, minute: 0),
       scheduleType: ScheduleType.Regular,
