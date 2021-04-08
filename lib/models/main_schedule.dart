@@ -4,12 +4,31 @@ import 'package:hive/hive.dart';
 
 part 'main_schedule.g.dart';
 
-enum ScheduleType { Regular, SatHoliday, Sunday }
-enum FerrySide { Summerville, Millidgeville }
+@HiveType(typeId: 1)
+enum ScheduleType {
+  @HiveField(0)
+  Regular,
+  @HiveField(1)
+  SatHoliday,
+  @HiveField(2)
+  Sunday,
+}
 
+@HiveType(typeId: 2)
+enum FerrySide {
+  @HiveField(0)
+  Summerville,
+  @HiveField(1)
+  Millidgeville,
+}
+
+@HiveType(typeId: 0)
 class FerryScheduleItem {
+  @HiveField(0)
   final TimeOfDay departureTime;
+  @HiveField(1)
   final ScheduleType scheduleType;
+  @HiveField(2)
   final FerrySide ferrySide;
 
   const FerryScheduleItem({
@@ -20,7 +39,8 @@ class FerryScheduleItem {
 
   DateTime getDateTime() {
     DateTime now = DateTime.now();
-    return DateTime(now.year, now.month, now.day, departureTime.hour, departureTime.minute);
+    return DateTime(
+        now.year, now.month, now.day, departureTime.hour, departureTime.minute);
   }
 }
 
