@@ -1,29 +1,13 @@
-import 'dart:developer';
-
 import 'package:ferry_buddy/widgets/background.dart';
 import 'package:ferry_buddy/models/main_schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
 
 const mainScheduleBox = 'schedule';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  print("Start");
-  // final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
-  // await Hive.initFlutter();
-  // Hive.registerAdapter<FerryScheduleItem>(FerryScheduleItemAdapter());
-  // Hive.registerAdapter<ScheduleType>(ScheduleTypeAdapter());
-  // Hive.registerAdapter<TimeOfDay>(TimeOfDayAdapter());
-  // Hive.registerAdapter<FerrySide>(FerrySideAdapter());
-  // await Hive.openBox<FerryScheduleItem>(mainScheduleBox);
-  // Box<FerryScheduleItem> scheduleBox = Hive.box(mainScheduleBox);
-  // scheduleBox.addAll(schedule);
-  print("After");
+  FerryScheduleItem schedule = await loadSchedule();
   runApp(MyApp());
 }
 
@@ -40,37 +24,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class CreateDB extends StatelessWidget {
-//   final Box<FerryScheduleItem> scheduleBox = Hive.box(mainScheduleBox);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.blue,
-//       ),
-//       body: Center(
-//         child: Center(
-//           child: Container(
-//             child: TextButton(
-//               child: Text("Press"),
-//               onPressed: () => {
-//                 print("Before function"),
-//                 _populateBox(scheduleBox),
-//                 print("After function"),
-//               },
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-
-//   _populateBox(Box<FerryScheduleItem> scheduleBox) {
-//     scheduleBox.addAll(schedule);
-//   }
-// }
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
