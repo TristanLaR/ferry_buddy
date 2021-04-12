@@ -1,10 +1,16 @@
+import 'package:ferry_buddy/repositories/ferry_schedule_repo.dart';
 import 'package:ferry_buddy/widgets/background.dart';
 import 'package:ferry_buddy/models/main_schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
 const mainScheduleBox = 'schedule';
+
+final ferryScheduleProvider = FutureProvider.autoDispose<FerryScheduleItem>((ref) async {
+  return ref.watch(ferryScheduleRepoProvider).loadSchedule();
+});
 
 void main() async {
   FerryScheduleItem schedule = await loadSchedule();
@@ -30,6 +36,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final schedule = useProvider(ferryScheduleProvider);
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Stack(

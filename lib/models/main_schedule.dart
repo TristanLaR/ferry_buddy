@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
-
 enum ScheduleType {
   Regular,
   SatHoliday,
@@ -42,14 +40,4 @@ class FerryScheduleItem {
         scheduleType: json["scheduleType"],
         ferrySide: json["ferrySide"],
       );
-}
-
-Future<String> _loadScheduleAsset() async {
-  return await rootBundle.loadString('assets/schedule.json');
-}
-
-Future<FerryScheduleItem> loadSchedule() async {
-  String jsonString = await _loadScheduleAsset();
-  final jsonResponse = json.decode(jsonString);
-  return new FerryScheduleItem.fromJson(jsonResponse);
 }
