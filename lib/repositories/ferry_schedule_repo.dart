@@ -10,9 +10,9 @@ class FerryScheduleRepository {
     return await rootBundle.loadString('assets/schedule.json');
   }
 
-  Future<FerryScheduleItem> loadSchedule() async {
+  Future<FerrySchedule> loadSchedule() async {
     String jsonString = await _loadScheduleAsset();
     // final jsonResponse = json.decode(jsonString);
-    return new FerryScheduleItem.fromJson(jsonString);
+    return new FerrySchedule.fromJson(jsonString);
   }
 }

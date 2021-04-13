@@ -9,7 +9,7 @@ import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 const mainScheduleBox = 'schedule';
 
 final ferryScheduleProvider =
-    FutureProvider.autoDispose<FerryScheduleItem>((ref) async {
+    FutureProvider.autoDispose<FerrySchedule>((ref) async {
   return ref.watch(ferryScheduleRepoProvider).loadSchedule();
 });
 
@@ -55,7 +55,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildPage(FerryScheduleItem scheduleItem) {
+  Widget _buildPage(FerrySchedule scheduleItem) {
     return Column(
       children: [
         Flexible(
@@ -137,16 +137,20 @@ class FerryTimerState extends State<FerryTimer> {
   }
 
   FerryScheduleItem _getNextRun() {
-    final schedule = useProvider(ferryScheduleProvider);
-    FerryScheduleItem nextRun;
-    for (var item in schedule) {
-      if (item.ferrySide == widget.ferrySide &&
-          item.getDateTime().isAfter(DateTime.now())) {
-        nextRun = item;
-        break;
-      }
-    }
-    return nextRun;
+    final scheduleProvider = useProvider(ferryScheduleProvider);
+    scheduleProvider.whenData(
+      (schedule) {
+        FerryScheduleItem nextRun;
+        for (var item in schedule.schedule) {
+          if (item.ferrySide == widget.ferrySide &&
+              item.getDateTime().isAfter(DateTime.now())) {
+            nextRun = item;
+            break;
+          }
+        }
+        return nextRun;
+      },
+    );
   }
 }
 
@@ -229,32 +233,42 @@ class ScheduleCardColumn extends StatelessWidget {
   }
 
   List<FerryScheduleItem> _testData() {
-    List<FerryScheduleItem> nextRuns = [];
-    int listLength = 8;
-    for (var item in schedule) {
-      nextRuns.add(item);
-      listLength--;
-      if (listLength == 0) break;
-    }
-    return nextRuns;
+    final scheduleProvider = useProvider(ferryScheduleProvider);
+    scheduleProvider.whenData(
+      (schedule) {
+        List<FerryScheduleItem> nextRuns = [];
+        int listLength = 8;
+        for (var item in schedule.schedule) {
+          nextRuns.add(item);
+          listLength--;
+          if (listLength == 0) break;
+        }
+        return nextRuns;
+      },
+    );
   }
 
   List<FerryScheduleItem> _getNextRuns() {
-    List<FerryScheduleItem> nextRuns = [];
-    int listLength = 6;
-    bool rightSide;
-    bool rightTime;
-    for (var item in schedule) {
-      rightSide = item.ferrySide == ferrySide;
-      rightTime = item
-          .getDateTime()
-          .isAfter(DateTime.now().subtract(Duration(hours: 5)));
-      if (rightSide && rightTime) {
-        nextRuns.add(item);
-        listLength--;
-        if (listLength == 0) break;
-      }
-    }
-    return nextRuns;
+    final scheduleProvider = useProvider(ferryScheduleProvider);
+    scheduleProvider.whenData(
+      (schedule) {
+        List<FerryScheduleItem> nextRuns = [];
+        int listLength = 6;
+        bool rightSide;
+        bool rightTime;
+        for (var item in schedule.schedule) {
+          rightSide = item.ferrySide == ferrySide;
+          rightTime = item
+              .getDateTime()
+              .isAfter(DateTime.now().subtract(Duration(hours: 5)));
+          if (rightSide && rightTime) {
+            nextRuns.add(item);
+            listLength--;
+            if (listLength == 0) break;
+          }
+        }
+        return nextRuns;
+      },
+    );
   }
 }

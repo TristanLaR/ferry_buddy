@@ -29,9 +29,6 @@ class FerryScheduleItem {
         now.year, now.month, now.day, departureTime.hour, departureTime.minute);
   }
 
-  factory FerryScheduleItem.fromJson(String str) =>
-      FerryScheduleItem.fromMap(json.decode(str));
-
   factory FerryScheduleItem.fromMap(Map<String, dynamic> json) =>
       FerryScheduleItem(
         departureTime: TimeOfDay(
@@ -40,4 +37,19 @@ class FerryScheduleItem {
         scheduleType: json["scheduleType"],
         ferrySide: json["ferrySide"],
       );
+}
+
+class FerrySchedule {
+  final List<FerryScheduleItem> schedule;
+
+  const FerrySchedule({
+    this.schedule,
+  });
+
+  factory FerrySchedule.fromJson(String str) =>
+      FerrySchedule.fromMap(json.decode(str));
+
+  factory FerrySchedule.fromMap(Map<String, dynamic> json) => FerrySchedule(
+        schedule: List<FerryScheduleItem>.from(json[0].map((x) => FerryScheduleItem.fromMap(x))),
+    );
 }
