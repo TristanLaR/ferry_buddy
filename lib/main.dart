@@ -8,12 +8,13 @@ import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
 const mainScheduleBox = 'schedule';
 
-final ferryScheduleProvider = FutureProvider.autoDispose<FerryScheduleItem>((ref) async {
+final ferryScheduleProvider =
+    FutureProvider.autoDispose<FerryScheduleItem>((ref) async {
   return ref.watch(ferryScheduleRepoProvider).loadSchedule();
 });
 
 void main() async {
-  FerryScheduleItem schedule = await loadSchedule();
+  // FerryScheduleItem schedule = await loadSchedule();
   runApp(MyApp());
 }
 
@@ -26,7 +27,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SafeArea(child: HomePage()),
+      home: SafeArea(
+        child: HomePage(),
+      ),
     );
   }
 }
@@ -42,29 +45,37 @@ class HomePage extends StatelessWidget {
       body: Stack(
         children: [
           Background(),
-          Column(
-            children: [
-              Flexible(
-                flex: 4,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FerryTimer(ferrySide: FerrySide.Millidgeville),
-                      FerryTimer(ferrySide: FerrySide.Summerville),
-                      // ScheduleCard(),
-                    ],
-                  ),
-                ),
-              ),
-              Flexible(
-                flex: 7,
-                child: ScheduleCard(),
-              ),
-            ],
+          schedule.when(
+            data: (schedule) => _buildPage(schedule),
+            loading: () => Container(),
+            error: (error, _) => Container(),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPage(FerryScheduleItem scheduleItem) {
+    return Column(
+      children: [
+        Flexible(
+          flex: 4,
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FerryTimer(ferrySide: FerrySide.Millidgeville),
+                FerryTimer(ferrySide: FerrySide.Summerville),
+                // ScheduleCard(),
+              ],
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 7,
+          child: ScheduleCard(),
+        ),
+      ],
     );
   }
 }
@@ -126,6 +137,7 @@ class FerryTimerState extends State<FerryTimer> {
   }
 
   FerryScheduleItem _getNextRun() {
+    final schedule = useProvider(ferryScheduleProvider);
     FerryScheduleItem nextRun;
     for (var item in schedule) {
       if (item.ferrySide == widget.ferrySide &&
