@@ -1,4 +1,4 @@
-import 'package:ferry_buddy/models/main_schedule.dart';
+import 'package:ferry_buddy/models/schedule_model.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

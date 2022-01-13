@@ -18,9 +18,9 @@ class FerryScheduleItem {
   final FerrySide ferrySide;
 
   const FerryScheduleItem({
-    this.departureTime,
-    this.scheduleType,
-    this.ferrySide,
+    required this.departureTime,
+    required this.scheduleType,
+    required this.ferrySide,
   });
 
   DateTime getDateTime() {
@@ -43,7 +43,7 @@ class FerrySchedule {
   final List<FerryScheduleItem> schedule;
 
   const FerrySchedule({
-    this.schedule,
+    required this.schedule,
   });
 
   factory FerrySchedule.fromJson(String str) =>
