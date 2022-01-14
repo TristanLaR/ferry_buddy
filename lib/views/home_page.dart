@@ -13,20 +13,6 @@ final ferryScheduleProvider =
   return ref.watch(ferryScheduleRepoProvider).loadSchedule();
 });
 
-// Return index of where we are in the schedule 
-final nextRunProvider = StateProvider<FerryScheduleItem?>((ref) {
-  final scheduleProvider = ref.watch(ferryScheduleProvider);
-    scheduleProvider.whenData(
-      (data) {
-        for (var item in data.schedule) {
-          if (item.getDateTime().isAfter(DateTime.now())) return item;          
-        }
-        return data.schedule.first;
-      },
-    );
-  }
-);
-
 class HomePage extends HookConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
 
