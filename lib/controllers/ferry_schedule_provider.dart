@@ -7,16 +7,16 @@ final upcomingRunsProvider = StateProvider<FerrySchedule>((ref) {
   final scheduleProvider = ref.watch(ferryScheduleProvider);
   scheduleProvider.whenData((ferrySchedule) {
     for (int i = 0; i < ferrySchedule.schedule.length; i++) {
-      List<FerryScheduleItem> item = ferrySchedule.schedule;
-      if (item[i].getDateTime().isAfter(DateTime.now()) &&
+      List<FerryScheduleItem> items = ferrySchedule.schedule;
+      if (items[i].getDateTime().isAfter(DateTime.now()) &&
           i + listLength < ferrySchedule.schedule.length) {
-        return FerrySchedule(schedule: item.sublist(i, i + listLength));
-      } else if (item[i].getDateTime().isAfter(DateTime.now()) &&
+        return FerrySchedule(schedule: items.sublist(i, i + listLength));
+      } else if (items[i].getDateTime().isAfter(DateTime.now()) &&
           i + listLength >= ferrySchedule.schedule.length) {
         int tomorrowRuns =
             listLength - ferrySchedule.schedule.length - i + listLength + 1;
         return FerrySchedule(
-            schedule: item.sublist(i) + item.sublist(0, tomorrowRuns));
+            schedule: items.sublist(i) + items.sublist(0, tomorrowRuns));
       }
     }
     return FerrySchedule(

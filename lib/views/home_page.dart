@@ -1,4 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:ferry_buddy/controllers/ferry_schedule_provider.dart';
 import 'package:ferry_buddy/models/schedule_model.dart';
 import 'package:ferry_buddy/repositories/ferry_schedule_repo.dart';
 import 'package:ferry_buddy/widgets/background.dart';
@@ -66,7 +67,7 @@ class FerryTimer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    FerryScheduleItem nextRun = _getNextRun();
+    FerryScheduleItem nextRun = ref.watch(nextRunProvider(null));
     return Container(
       child: Center(
         child: Column(
@@ -100,30 +101,13 @@ class FerryTimer extends HookConsumerWidget {
       ),
     );
   }
-
-  FerryScheduleItem _getNextRun() {
-    final scheduleProvider = ;
-    scheduleProvider.whenData(
-      (schedule) {
-        FerryScheduleItem nextRun;
-        for (var item in schedule.schedule) {
-          if (item.ferrySide == widget.ferrySide &&
-              item.getDateTime().isAfter(DateTime.now())) {
-            nextRun = item;
-            break;
-          }
-        }
-        return nextRun;
-      },
-    );
-  }
 }
 
-class ScheduleCard extends StatelessWidget {
-  const ScheduleCard({Key key}) : super(key: key);
+class ScheduleCard extends HookConsumerWidget {
+  const ScheduleCard({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: 36.0,
@@ -153,17 +137,17 @@ class ScheduleCard extends StatelessWidget {
   }
 }
 
-class ScheduleCardColumn extends StatelessWidget {
+class ScheduleCardColumn extends HookConsumerWidget {
   final FerrySide ferrySide;
 
   const ScheduleCardColumn({
-    this.ferrySide,
-    Key key,
+    required this.ferrySide,
+    Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final List<FerryScheduleItem> nextRuns = _testData();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nextRuns = ref.watch(upcomingRunsProvider);
     return Container(
       margin: EdgeInsets.fromLTRB(12.0, 16.0, 12.0, 0.0),
       child: Column(
@@ -180,12 +164,12 @@ class ScheduleCardColumn extends StatelessWidget {
               },
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: nextRuns.length,
+              itemCount: nextRuns.schedule.length,
               itemBuilder: (context, index) {
                 return Container(
                   child: Center(
                     child: Text(
-                      nextRuns[index].departureTime.format(context),
+                      nextRuns.schedule[index].departureTime.format(context),
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.bold),
                     ),
@@ -194,46 +178,6 @@ class ScheduleCardColumn extends StatelessWidget {
               }),
         ],
       ),
-    );
-  }
-
-  List<FerryScheduleItem> _testData() {
-    final scheduleProvider = useProvider(ferryScheduleProvider);
-    scheduleProvider.whenData(
-      (schedule) {
-        List<FerryScheduleItem> nextRuns = [];
-        int listLength = 8;
-        for (var item in schedule.schedule) {
-          nextRuns.add(item);
-          listLength--;
-          if (listLength == 0) break;
-        }
-        return nextRuns;
-      },
-    );
-  }
-
-  List<FerryScheduleItem> _getNextRuns() {
-    final scheduleProvider = useProvider(ferryScheduleProvider);
-    scheduleProvider.whenData(
-      (schedule) {
-        List<FerryScheduleItem> nextRuns = [];
-        int listLength = 6;
-        bool rightSide;
-        bool rightTime;
-        for (var item in schedule.schedule) {
-          rightSide = item.ferrySide == ferrySide;
-          rightTime = item
-              .getDateTime()
-              .isAfter(DateTime.now().subtract(Duration(hours: 5)));
-          if (rightSide && rightTime) {
-            nextRuns.add(item);
-            listLength--;
-            if (listLength == 0) break;
-          }
-        }
-        return nextRuns;
-      },
     );
   }
 }
