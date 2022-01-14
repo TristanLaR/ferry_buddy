@@ -1,4 +1,6 @@
-import 'package:ferry_buddy/models/schedule_model.dart';
+import 'dart:convert';
+
+import 'package:ferry_buddy/models/ferry_model.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,7 +14,6 @@ class FerryScheduleRepository {
 
   Future<FerrySchedule> loadSchedule() async {
     String jsonString = await _loadScheduleAsset();
-    // final jsonResponse = json.decode(jsonString);
     return new FerrySchedule.fromJson(jsonString);
   }
 }

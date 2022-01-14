@@ -1,4 +1,4 @@
-import 'package:ferry_buddy/models/schedule_model.dart';
+import 'package:ferry_buddy/models/ferry_model.dart';
 import 'package:ferry_buddy/views/home_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

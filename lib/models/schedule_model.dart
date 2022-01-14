@@ -12,12 +12,12 @@ enum FerrySide {
   Millidgeville,
 }
 
-class FerryScheduleItem {
+class OldFerryScheduleItem {
   final TimeOfDay departureTime;
   final ScheduleType scheduleType;
   final FerrySide ferrySide;
 
-  const FerryScheduleItem({
+  const OldFerryScheduleItem({
     required this.departureTime,
     required this.scheduleType,
     required this.ferrySide,
@@ -29,8 +29,8 @@ class FerryScheduleItem {
         now.year, now.month, now.day, departureTime.hour, departureTime.minute);
   }
 
-  factory FerryScheduleItem.fromMap(Map<String, dynamic> json) =>
-      FerryScheduleItem(
+  factory OldFerryScheduleItem.fromMap(Map<String, dynamic> json) =>
+      OldFerryScheduleItem(
         departureTime: TimeOfDay(
             hour: json["departureTime"]["hour"],
             minute: json["departureTime"]["minute"]),
@@ -39,17 +39,17 @@ class FerryScheduleItem {
       );
 }
 
-class FerrySchedule {
-  final List<FerryScheduleItem> schedule;
+class OldFerrySchedule {
+  final List<OldFerryScheduleItem> schedule;
 
-  const FerrySchedule({
+  const OldFerrySchedule({
     required this.schedule,
   });
 
-  factory FerrySchedule.fromJson(String str) =>
-      FerrySchedule.fromMap(json.decode(str));
+  factory OldFerrySchedule.fromJson(String str) =>
+      OldFerrySchedule.fromMap(json.decode(str));
 
-  factory FerrySchedule.fromMap(Map<String, dynamic> json) => FerrySchedule(
-        schedule: List<FerryScheduleItem>.from(json[0].map((x) => FerryScheduleItem.fromMap(x))),
+  factory OldFerrySchedule.fromMap(Map<String, dynamic> json) => OldFerrySchedule(
+        schedule: List<OldFerryScheduleItem>.from(json[0].map((x) => OldFerryScheduleItem.fromMap(x))),
     );
 }

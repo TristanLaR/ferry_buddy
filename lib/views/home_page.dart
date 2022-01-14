@@ -1,16 +1,14 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:ferry_buddy/controllers/ferry_schedule_provider.dart';
-import 'package:ferry_buddy/models/schedule_model.dart';
+import 'package:ferry_buddy/models/ferry_model.dart';
 import 'package:ferry_buddy/repositories/ferry_schedule_repo.dart';
 import 'package:ferry_buddy/widgets/background.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:slide_countdown_clock/slide_countdown_clock.dart';
+import 'package:intl/intl.dart';
 
 // Provides [FerrySchedule]
-final ferryScheduleProvider =
-    FutureProvider<FerrySchedule>((ref) async {
+final ferryScheduleProvider = FutureProvider<FerrySchedule>((ref) async {
   return ref.watch(ferryScheduleRepoProvider).loadSchedule();
 });
 
@@ -63,11 +61,11 @@ class HomePage extends HookConsumerWidget {
 class FerryTimer extends HookConsumerWidget {
   const FerryTimer({required this.ferrySide, Key? key}) : super(key: key);
 
-  final FerrySide ferrySide; 
+  final FerrySide ferrySide;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    FerryScheduleItem nextRun = ref.watch(nextRunProvider(null));
+    FerryScheduleItem nextRun = ref.watch(nextRunProvider(ferrySide));
     return Container(
       child: Center(
         child: Column(
@@ -84,17 +82,15 @@ class FerryTimer extends HookConsumerWidget {
                 // fontWeight: FontWeight.bold,
               ),
             ),
-            SlideCountdownClock(
-              duration: nextRun.getDateTime().difference(DateTime.now()),
-              // duration: Duration(seconds: 4),
-              slideDirection: SlideDirection.Down,
-              separator: ":",
-              textStyle: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-              onDone: () {},
+            StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 1)),
+              builder: (context, snapshot) {
+                return Center(
+                  child: Text(
+                    DateFormat('hh:mm:ss').format(DateTime.now()),
+                  ),
+                );
+              },
             ),
           ],
         ),
