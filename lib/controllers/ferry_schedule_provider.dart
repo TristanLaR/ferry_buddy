@@ -2,36 +2,43 @@ import 'package:ferry_buddy/models/ferry_model.dart';
 import 'package:ferry_buddy/views/home_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final upcomingRunsProvider = StateProvider<FerrySchedule>((ref) {
-  int listLength = 16;
+final upcomingRunsProvider =
+    StateProvider.family<FerrySchedule, FerrySide>((ref, ferrySide) {
+  int listLength = 8;
   final scheduleProvider = ref.watch(ferryScheduleProvider);
   scheduleProvider.whenData((ferrySchedule) {
-    for (int i = 0; i < ferrySchedule.schedule.length; i++) {
-      List<FerryScheduleItem> items = ferrySchedule.schedule;
+    List<FerryScheduleItem> schedule = ferrySchedule.schedule
+        .where((item) => item.ferrySide == ferrySide)
+        .toList();
+    for (int i = 0; i < schedule.length; i++) {
+      List<FerryScheduleItem> items = schedule;
       if (items[i].getDateTime().isAfter(DateTime.now()) &&
-          i + listLength < ferrySchedule.schedule.length) {
+          i + listLength < schedule.length) {
         return FerrySchedule(schedule: items.sublist(i, i + listLength));
       } else if (items[i].getDateTime().isAfter(DateTime.now()) &&
-          i + listLength >= ferrySchedule.schedule.length) {
-        int tomorrowRuns =
-            listLength - ferrySchedule.schedule.length - i + listLength + 1;
+          i + listLength >= schedule.length) {
+        int tomorrowRuns = listLength - schedule.length - i + listLength + 1;
         return FerrySchedule(
             schedule: items.sublist(i) + items.sublist(0, tomorrowRuns));
       }
     }
-    return FerrySchedule(
-        schedule: ferrySchedule.schedule.sublist(0, listLength - 1));
+    return FerrySchedule(schedule: schedule.sublist(0, listLength - 1));
   });
   return FerrySchedule(schedule: []);
 });
 
 final nextRunProvider =
-    StateProvider.family<FerryScheduleItem, FerrySide?>((ref, ferrySide) {
-  final upcomingRuns = ref.watch(upcomingRunsProvider);
+    StateProvider.family<FerryScheduleItem?, FerrySide?>((ref, ferrySide) {
+  final scheduleProvider = ref.watch(ferryScheduleProvider);
 
-  if (ferrySide == null) {
-    return upcomingRuns.schedule.first;
-  } else {
-    return upcomingRuns.schedule.firstWhere((item) => item.ferrySide == ferrySide);
-  }
+  scheduleProvider.whenData((ferrySchedule) {
+    if (ferrySide == null) {
+      return ferrySchedule.schedule
+          .firstWhere((item) => item.getDateTime().isAfter(DateTime.now()));
+    } else {
+      return ferrySchedule.schedule
+          .where((item) => item.ferrySide == ferrySide)
+          .firstWhere((item) => item.getDateTime().isAfter(DateTime.now()));
+    }
+  });
 });
