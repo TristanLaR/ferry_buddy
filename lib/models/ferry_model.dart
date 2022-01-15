@@ -28,6 +28,10 @@ class FerrySchedule {
         schedule: List<FerryScheduleItem>.from(
             json.map((x) => FerryScheduleItem.fromMap(x))),
       );
+
+  sort() {
+    this.schedule.sort((a,b) => a.getDateTime().compareTo(b.getDateTime()));
+  }
 }
 
 class FerryScheduleItem {
