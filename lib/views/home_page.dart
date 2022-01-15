@@ -3,6 +3,7 @@ import 'package:ferry_buddy/controllers/ferry_schedule_provider.dart';
 import 'package:ferry_buddy/models/ferry_model.dart';
 import 'package:ferry_buddy/repositories/ferry_schedule_repo.dart';
 import 'package:ferry_buddy/widgets/background.dart';
+import 'package:ferry_buddy/widgets/ferry_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -42,8 +43,8 @@ class HomePage extends HookConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FerryTimer(ferrySide: FerrySide.Millidgeville),
-                FerryTimer(ferrySide: FerrySide.Summerville),
+                TimerWidget(ferrySide: FerrySide.Millidgeville),
+                TimerWidget(ferrySide: FerrySide.Summerville),
                 // ScheduleCard(),
               ],
             ),
@@ -58,8 +59,8 @@ class HomePage extends HookConsumerWidget {
   }
 }
 
-class FerryTimer extends HookConsumerWidget {
-  const FerryTimer({required this.ferrySide, Key? key}) : super(key: key);
+class TimerWidget extends HookConsumerWidget {
+  const TimerWidget({required this.ferrySide, Key? key}) : super(key: key);
 
   final FerrySide ferrySide;
 
@@ -86,9 +87,9 @@ class FerryTimer extends HookConsumerWidget {
               stream: Stream.periodic(const Duration(seconds: 1)),
               builder: (context, snapshot) {
                 return Center(
-                  child: Text(
-                    DateFormat('hh:mm:ss').format(DateTime.now()),
-                    style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold, color: Colors.white),
+                  child: FerryTimer(
+                    duration: nextRun.getDateTime().difference(DateTime.now()),
+                    style: TextStyle(fontSize: 42.0, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 );
               },
