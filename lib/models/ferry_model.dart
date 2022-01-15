@@ -70,7 +70,7 @@ class FerryScheduleItem {
           hour: map["departureTime"]["hour"],
           minute: map["departureTime"]["minute"]),
       scheduleType: map['scheduleType'] ?? '',
-      ferrySide: FerrySide.values[map['ferrySide'] ?? 0],
+      ferrySide: FerrySide.values.singleWhere((side) => side.name == map['ferrySide']),
     );
   }
 
