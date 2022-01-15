@@ -65,7 +65,8 @@ class FerryTimer extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    FerryScheduleItem nextRun = ref.watch(nextRunProvider(ferrySide));
+    final nextRun = ref.watch(nextRunProvider(ferrySide));
+    print(nextRun);
     return Container(
       child: Center(
         child: Column(
@@ -73,25 +74,26 @@ class FerryTimer extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              EnumToString.convertToString(ferrySide) +
-                  " - " +
-                  nextRun.departureTime.format(context),
+              "${ferrySide.name} - ${nextRun.departureTime.format(context)}",
               style: TextStyle(
                 fontSize: 24.0,
                 color: Colors.white,
                 // fontWeight: FontWeight.bold,
               ),
             ),
+            SizedBox(height: 10),
             StreamBuilder(
               stream: Stream.periodic(const Duration(seconds: 1)),
               builder: (context, snapshot) {
                 return Center(
                   child: Text(
                     DateFormat('hh:mm:ss').format(DateTime.now()),
+                    style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 );
               },
             ),
+            SizedBox(height: 10),
           ],
         ),
       ),
@@ -143,14 +145,14 @@ class ScheduleCardColumn extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nextRuns = ref.watch(upcomingRunsProvider);
+    final nextRuns = ref.watch(upcomingRunsProvider(ferrySide));
     return Container(
       margin: EdgeInsets.fromLTRB(12.0, 16.0, 12.0, 0.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            EnumToString.convertToString(ferrySide),
+            ferrySide.name,
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 32.0),

@@ -26,10 +26,10 @@ class FerrySchedule {
 
   factory FerrySchedule.fromMap(List<dynamic> json) => FerrySchedule(
         schedule: List<FerryScheduleItem>.from(
-            json.map((x) => FerryScheduleItem.fromMap(x))),
+            json.map((x) => FerryScheduleItem.fromMap(x))).toList()..sort((a,b) => a.getDateTime().compareTo(b.getDateTime())),
       );
 
-  sort() {
+  sortt() {
     this.schedule.sort((a,b) => a.getDateTime().compareTo(b.getDateTime()));
   }
 }

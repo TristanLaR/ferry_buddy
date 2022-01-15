@@ -14,6 +14,6 @@ class FerryScheduleRepository {
 
   Future<FerrySchedule> loadSchedule() async {
     String jsonString = await _loadScheduleAsset();
-    return new FerrySchedule.fromJson(jsonString).sort();
+    return new FerrySchedule.fromJson(jsonString);
   }
 }
