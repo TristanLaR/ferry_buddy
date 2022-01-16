@@ -1,4 +1,3 @@
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:ferry_buddy/controllers/ferry_schedule_provider.dart';
 import 'package:ferry_buddy/models/ferry_model.dart';
 import 'package:ferry_buddy/repositories/ferry_schedule_repo.dart';
@@ -6,7 +5,6 @@ import 'package:ferry_buddy/widgets/background.dart';
 import 'package:ferry_buddy/widgets/ferry_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 
 // Provides [FerrySchedule]
 final ferryScheduleProvider = FutureProvider<FerrySchedule>((ref) async {

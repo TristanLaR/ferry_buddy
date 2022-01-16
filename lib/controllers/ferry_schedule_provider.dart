@@ -28,8 +28,7 @@ final upcomingRunsProvider =
             schedule: items.sublist(i) + items.sublist(0, tomorrowRuns));
         break;
       } else {
-        upcomingRuns =
-            FerrySchedule(schedule: schedule.sublist(0, listLength));
+        upcomingRuns = FerrySchedule(schedule: schedule.sublist(0, listLength));
       }
     }
   });
@@ -39,20 +38,27 @@ final upcomingRunsProvider =
 final nextRunProvider =
     StateProvider.family<FerryScheduleItem, FerrySide?>((ref, ferrySide) {
   final scheduleProvider = ref.watch(ferryScheduleProvider);
-
-  var nextRun = FerryScheduleItem(
-      departureTime: TimeOfDay(hour: 15, minute: 30),
-      ferrySide: FerrySide.Summerville,
-      scheduleType: "Regular");
+  late FerryScheduleItem nextRun;
 
   scheduleProvider.whenData((ferrySchedule) {
     if (ferrySide == null) {
-      nextRun = ferrySchedule.schedule
-          .firstWhere((item) => item.getDateTime().isAfter(DateTime.now()));
+      if (DateTime.now().isBefore(ferrySchedule.schedule.last.getDateTime())) {
+        nextRun = ferrySchedule.schedule
+            .firstWhere((item) => item.getDateTime().isAfter(DateTime.now()));
+      } else {
+        nextRun = ferrySchedule.schedule.first;
+      }
     } else {
-      nextRun = ferrySchedule.schedule
+      List<FerryScheduleItem> sideSchedule = ferrySchedule.schedule
           .where((item) => item.ferrySide == ferrySide)
-          .firstWhere((item) => item.getDateTime().isAfter(DateTime.now()));
+          .toList();
+      if (DateTime.now().isBefore(sideSchedule.last.getDateTime())) {
+        nextRun = ferrySchedule.schedule
+            .where((item) => item.ferrySide == ferrySide)
+            .firstWhere((item) => item.getDateTime().isAfter(DateTime.now()));
+      } else {
+        nextRun = sideSchedule.first;
+      }
     }
   });
   return nextRun;
