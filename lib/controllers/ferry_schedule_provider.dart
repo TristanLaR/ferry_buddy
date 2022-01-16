@@ -23,7 +23,7 @@ final upcomingRunsProvider =
         break;
       } else if (items[i].getDateTime().isAfter(DateTime.now()) &&
           i + listLength >= schedule.length) {
-        int tomorrowRuns = listLength - schedule.length - i + listLength + 1;
+        int tomorrowRuns = listLength - (schedule.length - i);
         upcomingRuns = FerrySchedule(
             schedule: items.sublist(i) + items.sublist(0, tomorrowRuns));
         break;

@@ -89,7 +89,6 @@ class TimerWidget extends HookConsumerWidget {
                 return Center(
                   child: FerryTimer(
                     duration: nextRun.getDateTime().difference(DateTime.now()),
-                    style: TextStyle(fontSize: 42.0, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                 );
               },
