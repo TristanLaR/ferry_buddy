@@ -72,12 +72,15 @@ class TimerWidget extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "${ferrySide.name} - ${nextRun.departureTime.format(context)}",
-              style: TextStyle(
-                fontSize: 24.0,
-                color: Colors.white,
-                // fontWeight: FontWeight.bold,
+            FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Text(
+                "${ferrySide.name} - ${nextRun.departureTime.format(context)}",
+                style: TextStyle(
+                  fontSize: 24.0,
+                  color: Colors.white,
+                  // fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             SizedBox(height: 10),
@@ -149,9 +152,12 @@ class ScheduleCardColumn extends HookConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            ferrySide.name,
-            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+          FittedBox(
+            fit: BoxFit.fitWidth,
+            child: Text(
+              ferrySide.name,
+              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            ),
           ),
           SizedBox(height: 32.0),
           ListView.separated(
@@ -164,10 +170,13 @@ class ScheduleCardColumn extends HookConsumerWidget {
               itemBuilder: (context, index) {
                 return Container(
                   child: Center(
-                    child: Text(
-                      nextRuns.schedule[index].departureTime.format(context),
-                      style: TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.bold),
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
+                        nextRuns.schedule[index].departureTime.format(context),
+                        style: TextStyle(
+                            fontSize: 24.0, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 );

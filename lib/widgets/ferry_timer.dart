@@ -32,9 +32,12 @@ class FerryTimer extends HookConsumerWidget {
       }
       return timer.cancel;
     }, []);
-    return Text(
-      "${(duration.inHours).toString().padLeft(2, '0')}:${(duration.inMinutes % 60).toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}",
-      style: style,
+    return FittedBox(
+      fit: BoxFit.fitWidth,
+      child: Text(
+        "${(duration.inHours).toString().padLeft(2, '0')}:${(duration.inMinutes % 60).toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}",
+        style: style,
+      ),
     );
   }
 }
