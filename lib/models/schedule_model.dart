@@ -20,6 +20,13 @@ class Schedule {
         summervilleSchedule: List<DateTime>.from(json["SummervilleSchedule"].map((x) => DateTime.parse(x))),
         millidgevilleSchedule: List<DateTime>.from(json["MillidgevilleSchedule"].map((x) => DateTime.parse(x))),
     );
+    
+    // TODO: If local, change parsed date to today + duplicate list for tomorrow
+    factory Schedule.fromLocalJson(Map<String, dynamic> json) => Schedule(
+        lastUpdated: DateTime.parse(json["lastUpdated"]),
+        summervilleSchedule: List<DateTime>.from(json["SummervilleSchedule"].map((x) => DateTime.parse(x))),
+        millidgevilleSchedule: List<DateTime>.from(json["MillidgevilleSchedule"].map((x) => DateTime.parse(x))),
+    );
 
     Map<String, dynamic> toJson() => {
         "lastUpdated": lastUpdated.toIso8601String(),

@@ -13,10 +13,10 @@ final upcomingRunsProvider =
   scheduleProvider.whenData((ferrySchedule) {
     switch (ferrySide) {
       case FerrySide.Summerville:
-        upcomingRuns = ferrySchedule.summervilleSchedule.where((item) => item > DateTime.now());
+        upcomingRuns = ferrySchedule.summervilleSchedule.where((item) => item > DateTime.now()).take(listLength);
         break;
       case FerrySide.Millidgeville:
-        upcomingRuns = ferrySchedule.millidgevilleSchedule.where((item) => item > DateTime.now());
+        upcomingRuns = ferrySchedule.millidgevilleSchedule.where((item) => item > DateTime.now()).take(listLength);
         break;
     }
   });
