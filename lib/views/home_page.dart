@@ -64,7 +64,7 @@ class TimerWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nextRun = ref.watch(nextRunProvider(ferrySide));
+    final nextRun = ref.watch(upcomingRunsProvider(ferrySide)[0]);
     print(nextRun);
     return Container(
       child: Center(
