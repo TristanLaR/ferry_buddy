@@ -1,55 +1,63 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
 
-enum ScheduleType {
-  Regular,
-  SatHoliday,
-  Sunday,
-}
+Schedule scheduleFromJson(String str) => Schedule.fromJson(json.decode(str));
+Schedule scheduleFromLocalJson(String str) =>
+    Schedule.fromLocalJson(json.decode(str));
 
-enum FerrySide {
-  Summerville,
-  Millidgeville,
-}
+String scheduleToJson(Schedule data) => json.encode(data.toJson());
 
-class OldFerryScheduleItem {
-  final TimeOfDay departureTime;
-  final ScheduleType scheduleType;
-  final FerrySide ferrySide;
-
-  const OldFerryScheduleItem({
-    required this.departureTime,
-    required this.scheduleType,
-    required this.ferrySide,
+class Schedule {
+  Schedule({
+    required this.lastUpdated,
+    required this.summervilleSchedule,
+    required this.millidgevilleSchedule,
   });
 
-  DateTime getDateTime() {
-    DateTime now = DateTime.now();
-    return DateTime(
-        now.year, now.month, now.day, departureTime.hour, departureTime.minute);
-  }
+  DateTime lastUpdated;
+  List<DateTime> summervilleSchedule;
+  List<DateTime> millidgevilleSchedule;
 
-  factory OldFerryScheduleItem.fromMap(Map<String, dynamic> json) =>
-      OldFerryScheduleItem(
-        departureTime: TimeOfDay(
-            hour: json["departureTime"]["hour"],
-            minute: json["departureTime"]["minute"]),
-        scheduleType: json["scheduleType"],
-        ferrySide: json["ferrySide"],
+  factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
+        lastUpdated: DateTime.parse(json["lastUpdated"]),
+        summervilleSchedule: List<DateTime>.from(
+            json["SummervilleSchedule"].map((x) => DateTime.parse(x))),
+        millidgevilleSchedule: List<DateTime>.from(
+            json["MillidgevilleSchedule"].map((x) => DateTime.parse(x))),
       );
-}
 
-class OldFerrySchedule {
-  final List<OldFerryScheduleItem> schedule;
+  // parse json from local storage
+  factory Schedule.fromLocalJson(Map<String, dynamic> json) => Schedule(
+        // update lastUpdated from json
+        lastUpdated: DateTime.parse(json["lastUpdated"]),
+        // parse json dates and set date to today, duplicate items in list and add 1 day
+        summervilleSchedule: List<DateTime>.from(json["SummervilleSchedule"]
+            .map((x) => DateTime.parse(x))
+            .map((x) => DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day, x.hour, x.minute))
+            .toList()
+          ..addAll(json["SummervilleSchedule"]
+              .map((x) => DateTime.parse(x))
+              .map((x) => DateTime(DateTime.now().year, DateTime.now().month,
+                  DateTime.now().day + 1, x.hour, x.minute))
+              .toList())),
+        // parse json dates and set date to today, duplicate items in list and add 1 day
+        millidgevilleSchedule: List<DateTime>.from(json["MillidgevilleSchedule"]
+            .map((x) => DateTime.parse(x))
+            .map((x) => DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day, x.hour, x.minute))
+            .toList()
+          ..addAll(json["MillidgevilleSchedule"]
+              .map((x) => DateTime.parse(x))
+              .map((x) => DateTime(DateTime.now().year, DateTime.now().month,
+                  DateTime.now().day + 1, x.hour, x.minute))
+              .toList())),
+      );
 
-  const OldFerrySchedule({
-    required this.schedule,
-  });
-
-  factory OldFerrySchedule.fromJson(String str) =>
-      OldFerrySchedule.fromMap(json.decode(str));
-
-  factory OldFerrySchedule.fromMap(Map<String, dynamic> json) => OldFerrySchedule(
-        schedule: List<OldFerryScheduleItem>.from(json[0].map((x) => OldFerryScheduleItem.fromMap(x))),
-    );
+  Map<String, dynamic> toJson() => {
+        "lastUpdated": lastUpdated.toIso8601String(),
+        "SummervilleSchedule": List<dynamic>.from(
+            summervilleSchedule.map((x) => x.toIso8601String())),
+        "MillidgevilleSchedule": List<dynamic>.from(
+            millidgevilleSchedule.map((x) => x.toIso8601String())),
+      };
 }
