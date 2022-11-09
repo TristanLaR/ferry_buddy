@@ -43,8 +43,8 @@ class HomePage extends HookConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TimerWidget(ferrySide: FerrySide.Millidgeville),
                 TimerWidget(ferrySide: FerrySide.Summerville),
+                TimerWidget(ferrySide: FerrySide.Millidgeville),
                 // ScheduleCard(),
               ],
             ),
