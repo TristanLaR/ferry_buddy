@@ -28,5 +28,6 @@ final upcomingRunsProvider =
     }
   });
 
+  print("Next run: ${upcomingRuns.first}");
   return upcomingRuns;
 });

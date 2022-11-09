@@ -12,6 +12,7 @@ class FerryScheduleRepository {
   }
 
   Future<Schedule> loadSchedule() async {
+    print("LoadSchedule called");
     String jsonString = await _loadScheduleAsset();
     return scheduleFromLocalJson(jsonString);
   }

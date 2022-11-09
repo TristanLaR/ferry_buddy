@@ -8,26 +8,30 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class FerryTimer extends HookConsumerWidget {
   FerryTimer({
     Key? key,
-    required this.duration,
+    required this.countdownTime,
     this.style = const TextStyle(
         fontSize: 42.0, fontWeight: FontWeight.bold, color: Colors.white),
     this.onDone,
   }) : super(key: key);
 
-  final Duration duration;
+  final DateTime countdownTime;
   final TextStyle style;
   final VoidCallback? onDone;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var duration = countdownTime.difference(DateTime.now());
     useEffect(() {
-      final timer = Timer.periodic(duration, (time) {
-        time.tick;
+      Timer.periodic(const Duration(seconds: 1), (timer) {
+        print("Tick - ${duration.inSeconds}");
+        if (duration.inSeconds <= 0) {
+          print("countdown reached 0");
+          timer.cancel();
+          ref.refresh(ferryScheduleProvider);
+        }
+        duration = countdownTime.difference(DateTime.now());
       });
-      if (duration.inSeconds == 0) {
-        ref.refresh(ferryScheduleProvider);
-      }
-      return timer.cancel;
+      return null;
     }, []);
     return FittedBox(
       fit: BoxFit.fitWidth,

@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 
 // Provides [Schedule]
 final ferryScheduleProvider = FutureProvider<Schedule>((ref) async {
+  print("ferryScheduleProvider loaded");
   return ref.watch(ferryScheduleRepoProvider).loadSchedule();
 });
 
@@ -67,7 +68,7 @@ class TimerWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nextRun = ref.watch(upcomingRunsProvider(ferrySide))[0];
-    print(nextRun);
+    // print(nextRun);
     return Container(
       child: Center(
         child: Column(
@@ -91,7 +92,7 @@ class TimerWidget extends HookConsumerWidget {
               builder: (context, snapshot) {
                 return Center(
                   child: FerryTimer(
-                    duration: nextRun.difference(DateTime.now()),
+                    countdownTime: nextRun,
                   ),
                 );
               },
