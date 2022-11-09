@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -15,6 +13,6 @@ class FerryScheduleRepository {
 
   Future<Schedule> loadSchedule() async {
     String jsonString = await _loadScheduleAsset();
-    return scheduleFromJson(jsonString);
+    return scheduleFromLocalJson(jsonString);
   }
 }
