@@ -1,13 +1,15 @@
 import 'package:ferry_buddy/controllers/ferry_schedule_provider.dart';
-import 'package:ferry_buddy/models/ferry_model.dart';
+import 'package:ferry_buddy/models/enums.dart';
+import 'package:ferry_buddy/models/schedule_model.dart';
 import 'package:ferry_buddy/repositories/ferry_schedule_repo.dart';
 import 'package:ferry_buddy/widgets/background.dart';
 import 'package:ferry_buddy/widgets/ferry_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
-// Provides [FerrySchedule]
-final ferryScheduleProvider = FutureProvider<FerrySchedule>((ref) async {
+// Provides [Schedule]
+final ferryScheduleProvider = FutureProvider<Schedule>((ref) async {
   return ref.watch(ferryScheduleRepoProvider).loadSchedule();
 });
 
@@ -32,7 +34,7 @@ class HomePage extends HookConsumerWidget {
     );
   }
 
-  Widget _buildPage(FerrySchedule scheduleItem) {
+  Widget _buildPage(Schedule scheduleItem) {
     return Column(
       children: [
         Flexible(
@@ -64,7 +66,7 @@ class TimerWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nextRun = ref.watch(upcomingRunsProvider(ferrySide)[0]);
+    final nextRun = ref.watch(upcomingRunsProvider(ferrySide))[0];
     print(nextRun);
     return Container(
       child: Center(
@@ -75,7 +77,7 @@ class TimerWidget extends HookConsumerWidget {
             FittedBox(
               fit: BoxFit.fitWidth,
               child: Text(
-                "${ferrySide.name} - ${nextRun.departureTime.format(context)}",
+                "${ferrySide.name} - ${DateFormat.jm().format(nextRun)}",
                 style: TextStyle(
                   fontSize: 24.0,
                   color: Colors.white,
@@ -89,7 +91,7 @@ class TimerWidget extends HookConsumerWidget {
               builder: (context, snapshot) {
                 return Center(
                   child: FerryTimer(
-                    duration: nextRun.getDateTime().difference(DateTime.now()),
+                    duration: nextRun.difference(DateTime.now()),
                   ),
                 );
               },
@@ -166,14 +168,14 @@ class ScheduleCardColumn extends HookConsumerWidget {
               },
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: nextRuns.schedule.length,
+              itemCount: nextRuns.length,
               itemBuilder: (context, index) {
                 return Container(
                   child: Center(
                     child: FittedBox(
                       fit: BoxFit.fitWidth,
                       child: Text(
-                        nextRuns.schedule[index].departureTime.format(context),
+                        DateFormat.jm().format(nextRuns[index]),
                         style: TextStyle(
                             fontSize: 24.0, fontWeight: FontWeight.bold),
                       ),
