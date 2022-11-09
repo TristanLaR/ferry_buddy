@@ -23,7 +23,7 @@ class FerryTimer extends HookConsumerWidget {
     var duration = countdownTime.difference(DateTime.now());
     useEffect(() {
       Timer.periodic(const Duration(seconds: 1), (timer) {
-        print("Tick - ${duration.inSeconds}");
+        // print("Tick - ${duration.inSeconds}");
         if (duration.inSeconds <= 0) {
           print("countdown reached 0");
           timer.cancel();
