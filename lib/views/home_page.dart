@@ -22,28 +22,15 @@ class HomePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final schedule = ref.watch(ferryScheduleProvider);
 
-    final appLifecycleState = useAppLifecycleState();
-
-    useEffect(() {
-      print("current app state $appLifecycleState");
-      if (appLifecycleState == AppLifecycleState.resumed) {
-        ref.refresh(ferryScheduleProvider);
-      }
-      return null;
-    }, [appLifecycleState]);
-
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      body: Stack(
-        children: [
-          Background(),
-          schedule.when(
-            data: (schedule) => _buildPage(schedule),
-            loading: () => Container(),
-            error: (error, _) => Container(),
-          ),
-        ],
-      ),
+    return Stack(
+      children: [
+        Background(),
+        schedule.when(
+          data: (schedule) => _buildPage(schedule),
+          loading: () => Container(),
+          error: (error, _) => Container(),
+        ),
+      ],
     );
   }
 
@@ -69,25 +56,6 @@ class HomePage extends HookConsumerWidget {
         ),
       ],
     );
-  }
-
-  // check if the app is in the foreground
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        print("app in resumed");
-        break;
-      case AppLifecycleState.inactive:
-        print("app in inactive");
-        break;
-      case AppLifecycleState.paused:
-        print("app in paused");
-        break;
-      case AppLifecycleState.detached:
-        print("app in detached");
-        break;
-    }
   }
 }
 
