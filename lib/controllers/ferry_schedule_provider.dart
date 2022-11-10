@@ -6,7 +6,7 @@ import '../models/enums.dart';
 final upcomingRunsProvider =
     StateProvider.family<List<DateTime>, FerrySide>((ref, ferrySide) {
   int listLength = 8;
-  final scheduleProvider = ref.watch(ferryScheduleProvider);
+  final scheduleProvider = ref.read(ferryScheduleProvider);
 
   List<DateTime> upcomingRuns = [];
 

@@ -5,6 +5,7 @@ import 'package:ferry_buddy/repositories/ferry_schedule_repo.dart';
 import 'package:ferry_buddy/widgets/background.dart';
 import 'package:ferry_buddy/widgets/ferry_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -20,6 +21,17 @@ class HomePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final schedule = ref.watch(ferryScheduleProvider);
+
+    final appLifecycleState = useAppLifecycleState();
+
+    useEffect(() {
+      print("current app state $appLifecycleState");
+      if (appLifecycleState == AppLifecycleState.resumed) {
+        ref.refresh(ferryScheduleProvider);
+      }
+      return null;
+    }, [appLifecycleState]);
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Stack(
@@ -57,6 +69,25 @@ class HomePage extends HookConsumerWidget {
         ),
       ],
     );
+  }
+
+  // check if the app is in the foreground
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print("app in resumed");
+        break;
+      case AppLifecycleState.inactive:
+        print("app in inactive");
+        break;
+      case AppLifecycleState.paused:
+        print("app in paused");
+        break;
+      case AppLifecycleState.detached:
+        print("app in detached");
+        break;
+    }
   }
 }
 
