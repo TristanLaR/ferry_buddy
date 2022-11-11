@@ -32,17 +32,15 @@ class MyApp extends HookConsumerWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.grey.shade100,
-          body: OrientationBuilder(builder: (_, orientation) {
-            print("Orientation: $orientation");
-            if (orientation == Orientation.portrait)
-              return HomePage();
-            else
-              return LandscapeView();
-          }),
-        ),
+      home: Scaffold(
+        backgroundColor: Colors.grey.shade100,
+        body: OrientationBuilder(builder: (_, orientation) {
+          print("Orientation: $orientation");
+          if (orientation == Orientation.portrait)
+            return HomePage();
+          else
+            return LandscapeView();
+        }),
       ),
     );
   }

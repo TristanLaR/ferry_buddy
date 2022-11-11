@@ -26,8 +26,8 @@ class FerryTimer extends HookConsumerWidget {
         // print("Tick - ${duration.inSeconds}");
         if (duration.inSeconds <= 0) {
           print("countdown reached 0");
-          timer.cancel();
           ref.refresh(ferryScheduleProvider);
+          timer.cancel();
         }
         duration = countdownTime.difference(DateTime.now());
       });

@@ -38,7 +38,11 @@ class HomePage extends HookConsumerWidget {
     return Column(
       children: [
         Flexible(
-          flex: 4,
+          flex: 1,
+          child: Container(),
+        ),
+        Flexible(
+          flex: 8,
           child: Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +55,7 @@ class HomePage extends HookConsumerWidget {
           ),
         ),
         Flexible(
-          flex: 7,
+          flex: 14,
           child: ScheduleCard(),
         ),
       ],
@@ -79,7 +83,7 @@ class TimerWidget extends HookConsumerWidget {
               child: Text(
                 "${ferrySide.name} - ${DateFormat.jm().format(nextRun)}",
                 style: TextStyle(
-                  fontSize: 24.0,
+                  fontSize: 26.0,
                   color: Colors.white,
                   // fontWeight: FontWeight.bold,
                 ),
@@ -91,6 +95,11 @@ class TimerWidget extends HookConsumerWidget {
               builder: (context, snapshot) {
                 return Center(
                   child: FerryTimer(
+                    style: TextStyle(
+                      fontSize: 46.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                     countdownTime: nextRun,
                   ),
                 );
@@ -161,17 +170,23 @@ class ScheduleCardColumn extends HookConsumerWidget {
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: 32.0),
-          ListView.separated(
-              separatorBuilder: (context, index) {
-                return SizedBox(height: 12.0);
-              },
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: nextRuns.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  child: Center(
+          // Flexible(
+          //   flex: 1,
+          //   child: Container(),
+          // ),
+          Flexible(
+            flex: 2,
+            child: ListView.separated(
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 14.0);
+                },
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: nextRuns.length,
+                padding: EdgeInsets.only(top: 20),
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: FittedBox(
                       fit: BoxFit.fitWidth,
                       child: Text(
@@ -180,9 +195,9 @@ class ScheduleCardColumn extends HookConsumerWidget {
                             fontSize: 24.0, fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+          ),
         ],
       ),
     );
