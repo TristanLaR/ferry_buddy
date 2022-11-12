@@ -8,7 +8,7 @@ final ferryScheduleRepoProvider =
 
 class FerryScheduleRepository {
   Future<String> _loadScheduleAsset() async {
-    return await rootBundle.loadString('assets/schedule.json');
+    return await rootBundle.loadString('assets/testSchedule.json');
   }
 
   Future<Schedule> loadSchedule() async {
